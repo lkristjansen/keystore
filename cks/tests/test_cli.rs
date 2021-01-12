@@ -1,14 +1,21 @@
 use assert_cmd::prelude::*;
 use std::process::Command;
+use tempfile;
 
 #[test]
 fn generate_key_and_create_key_store() -> Result<(), Box<dyn std::error::Error>> {
+    let file = tempfile::NamedTempFile::new()?;
     let mut cmd = Command::cargo_bin("cks")?;
+
+    let key_store_path = file
+        .path()
+        .to_str()
+        .expect("failed to create temporery file");
 
     cmd.args(&[
         "generate-key",
         "--key-store-path",
-        "mystore.rs",
+        key_store_path,
         "--key-name",
         "mykey",
         "--key-strength",

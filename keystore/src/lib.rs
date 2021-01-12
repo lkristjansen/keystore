@@ -72,6 +72,12 @@ impl KeyStore {
     }
 
     pub fn deserialize<T: AsRef<str>>(data: T) -> Result<Self, KeyStoreError> {
+        let data = data.as_ref();
+
+        if data.is_empty() {
+            return Ok(KeyStore::new());
+        }
+
         Ok(serde_json::from_str(data.as_ref())?)
     }
 }
